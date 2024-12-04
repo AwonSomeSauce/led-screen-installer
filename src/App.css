@@ -1,0 +1,42 @@
+* {
+  color: black;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: 4fr 1fr; /* 4/5 for canvas, 1/5 for controls */
+  height: 100vh; /* Full screen height */
+  gap: 1rem; /* Space between sections */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.configuration,
+.description {
+  flex: 1;
+  margin-bottom: 1rem;
+  overflow: auto;
+}
+
+.configuration {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 1rem;
+}
+
+h2,
+h3 {
+  margin-bottom: 0.5rem;
+}
+
+p {
+  margin: 0.5rem 0;
+}

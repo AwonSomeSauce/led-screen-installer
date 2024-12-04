@@ -1,0 +1,32 @@
+.dropdown-selector {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #333;
+}
+
+.dropdown-select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+
+  /* For focus */
+  outline: none;
+}
+
+.dropdown-select:focus {
+  border-color: #007bff; /* Blue border on focus */
+}
+
+.dropdown-select:hover {
+  border-color: #555; /* Darker border on hover */
+}
