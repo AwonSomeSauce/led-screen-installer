@@ -1,0 +1,63 @@
+.notes-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  max-width: 100%;
+}
+
+.notes-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+}
+
+.notes-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.notes-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notes-item {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.notes-dimensions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dimension {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dimension-key {
+  background-color: #ddd;
+  flex: 1;
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dimension-value {
+  flex: 1;
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
+}

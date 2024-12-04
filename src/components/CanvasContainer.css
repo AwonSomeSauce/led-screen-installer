@@ -1,18 +1,57 @@
 .canvas-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  position: relative;
+  display: flex; /* Use Flexbox for layout */
+  background-color: #f9f9f9;
 }
 
-.canvas-placeholder {
-  width: 100%;
-  height: 100%;
-  background: #eaeaea;
-  border: 2px dashed #ccc;
-  border-radius: 4px;
+.canvas-area {
+  flex: 1.5; /* Reduced space for canvas-area */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-area {
+  flex: 1; /* Increased space for info-area */
+  display: flex;
+  flex-direction: column; /* Default layout (stacked) */
+  gap: 10px; /* Space between DimensionDisplay components */
+  height: fit-content; /* Prevent it from stretching unnecessarily */
+}
+
+@media screen and (min-width: 768px) {
+  /* Larger screens */
+  .info-area {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 20px; /* Add spacing between DimensionDisplay and InformationCard */
+  }
+
+  .dimension-container {
+    display: flex; /* Ensure DimensionDisplay components are side by side */
+    flex-direction: row;
+    gap: 20px; /* Space between DimensionDisplay components */
+  }
+}
+
+.info-area h3 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.info-section {
+  margin-bottom: 15px;
+}
+
+.info-section h4 {
+  margin-bottom: 8px;
+}
+
+.info-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.info-section ul li {
+  font-size: 14px;
+  margin-bottom: 5px;
 }

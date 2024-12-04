@@ -1,0 +1,22 @@
+/* General button styles */
+.toggle-button {
+  padding: 10px 15px;
+  background-color: #f0f0f0; /* Light background for better contrast */
+  color: #000; /* Ensure text color is readable */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle-button.active {
+  background-color: #007bff; /* Highlight active button */
+  color: #fff;
+}
+
+.toggle-button:hover {
+  background-color: #ddd; /* Hover state */
+}
+
+/* Add space between buttons */
+.toggle-option {
+  display: flex;
+}

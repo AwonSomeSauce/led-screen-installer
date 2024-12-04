@@ -11,17 +11,14 @@ function App() {
     media_player: '',
     receptacle_box: '',
     orientation: 'horizontal',
+    installType: '',
     floorDistance: 0,
   });
 
   return (
     <div className="app-container">
       {/* Canvas Section */}
-      <div className="canvas-container">
-        <h2>Canvas Area</h2>
-        {/* Placeholder for the canvas */}
-        <CanvasContainer config={config} />
-      </div>
+      <CanvasContainer config={config} />
 
       {/* Controls Section */}
       <div className="controls-container">

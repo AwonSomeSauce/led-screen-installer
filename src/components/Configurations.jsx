@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 
 import DropdownSelector from './DropdownSelector';
+import './Configurations.css';
 
 const Configurations = ({ config, setConfig }) => {
   const [screenOptions, setScreenOptions] = useState([]);
@@ -80,6 +81,16 @@ const Configurations = ({ config, setConfig }) => {
     },
   ];
 
+  // Handle either-or options
+  const handleToggleChange = (key, value) => {
+    setConfig({ ...config, [key]: value });
+  };
+
+  // Handle input field changes
+  const handleInputChange = (key, value) => {
+    setConfig({ ...config, [key]: value });
+  };
+
   return (
     <div className="configuration">
       <h3>Configuration</h3>
@@ -97,6 +108,46 @@ const Configurations = ({ config, setConfig }) => {
           }
         />
       ))}
+      {/* Either-Or Options */}
+      <div className="toggle-group">
+        <div className="toggle-option">
+          <button
+            className={`toggle-button ${
+              config.orientation === 'vertical' ? 'active' : ''
+            }`}
+            onClick={() => handleToggleChange('orientation', 'vertical')}
+          >
+            Vertical
+          </button>
+          <button
+            className={`toggle-button ${
+              config.orientation === 'horizontal' ? 'active' : ''
+            }`}
+            onClick={() => handleToggleChange('orientation', 'horizontal')}
+          >
+            Horizontal
+          </button>
+        </div>
+
+        <div className="toggle-option">
+          <button
+            className={`toggle-button ${
+              config.installType === 'niche' ? 'active' : ''
+            }`}
+            onClick={() => handleToggleChange('installType', 'niche')}
+          >
+            Niche
+          </button>
+          <button
+            className={`toggle-button ${
+              config.installType === 'flat_wall' ? 'active' : ''
+            }`}
+            onClick={() => handleToggleChange('installType', 'flat_wall')}
+          >
+            Flat Wall
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,10 +4,12 @@
 
 .app-container {
   display: grid;
-  grid-template-columns: 4fr 1fr; /* 4/5 for canvas, 1/5 for controls */
-  height: 100vh; /* Full screen height */
-  gap: 1rem; /* Space between sections */
+  grid-template-columns: 4fr 1fr; /* Adjust column ratio */
+  grid-template-rows: auto; /* Allow rows to adjust automatically */
+  height: 100vh; /* Full viewport height */
+  gap: 15px; /* Space between components */
   padding: 1rem;
+  overflow: hidden; /* Prevent overflowing */
   box-sizing: border-box;
 }
 
@@ -15,8 +17,6 @@
   display: flex;
   flex-direction: column;
   background: #f4f4f4;
-  border: 1px solid #ddd;
-  border-radius: 8px;
   padding: 1rem;
 }
 

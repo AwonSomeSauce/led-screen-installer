@@ -1,0 +1,44 @@
+.dimension-display {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  width: 100%;
+  max-width: 300px;
+}
+
+.dimension-display h3 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.dimension-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dimension-row {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dimension-key {
+  background-color: #ddd;
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dimension-value {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+}
