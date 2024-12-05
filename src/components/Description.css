@@ -1,0 +1,41 @@
+.description-container {
+  width: 300px; /* Match the width from the design */
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.description-container h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.description-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.description-field label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.description-field input {
+  height: 35px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.description-field input:focus {
+  border-color: #007bff; /* Highlighted border color */
+  outline: none;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5); /* Subtle focus effect */
+}

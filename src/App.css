@@ -4,7 +4,7 @@
 
 .app-container {
   display: grid;
-  grid-template-columns: 4fr 1fr; /* Adjust column ratio */
+  grid-template-columns: 5fr 1fr; /* Adjust column ratio */
   grid-template-rows: auto; /* Allow rows to adjust automatically */
   height: 100vh; /* Full viewport height */
   gap: 15px; /* Space between components */

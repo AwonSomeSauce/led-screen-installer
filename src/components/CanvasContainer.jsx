@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
-import { Stage, Layer, Rect, Text, Line, Arrow } from 'react-konva';
+import { Stage, Layer, Rect, Line } from 'react-konva';
 
 import DimensionDisplay from './DimensionDisplay';
 import NotesCard from './NotesCard';
 import InformationCard from './InformationCard';
+import LineWithArrows from './LineWithArrows';
 import './CanvasContainer.css';
 
 const CanvasContainer = ({ config }) => {
@@ -11,243 +12,224 @@ const CanvasContainer = ({ config }) => {
 
   // Canvas dimensions
   const canvasWidth = 600;
-  const canvasHeight = 400;
+  const canvasHeight = 750;
 
   // Input dimensions in inches from config
-  const screenWidthInInches = config.model ? config.model.width : 0;
-  const screenHeightInInches = config.model ? config.model.height : 0;
-  // const screenCenterHeightInInches = config.screenCenterHeight || 0;
-  const screenCenterHeightInInches = 50;
+  const screenWidthInInches =
+    config.model && config.model.width ? Number(config.model.width) : 1; // Default to 1 to avoid division by zero
+  const screenHeightInInches =
+    config.model && config.model.height ? Number(config.model.height) : 1;
+  const floorDistance =
+    config.model && config.model.floorDistance
+      ? Number(config.model.floorDistance)
+      : 50;
+  const nicheWidthInInches = screenWidthInInches + 2;
+  const nicheHeightInInches = screenHeightInInches + 2;
 
-  // Maximum expected dimensions in inches (adjust based on your requirements)
-  const maxScreenWidthInInches = 100; // Example maximum width
-  const maxScreenHeightInInches = 100; // Example maximum height
+  // Margins and clearances in pixels
+  const padding = 100; // Padding around the screen in pixels
+  const clearance = 10; // Clearance for niche around the screen in pixels
 
-  // Calculate scale factor to convert inches to pixels
-  const scaleX = canvasWidth / maxScreenWidthInInches;
-  const scaleY = canvasHeight / maxScreenHeightInInches;
-  const scale = Math.min(scaleX, scaleY); // Use the smaller scale to fit both dimensions
+  // Calculate the aspect ratio of the screen
+  const aspectRatio = screenWidthInInches / screenHeightInInches;
 
-  // Convert dimensions from inches to pixels
-  const screenWidth = screenWidthInInches * scale;
-  const screenHeight = screenHeightInInches * scale;
-  const screenCenterHeight = screenCenterHeightInInches * scale;
+  // Determine scaling factor to fit the screen within the canvas
+  let scaledScreenWidth, scaledScreenHeight;
 
-  // Calculate positions
-  const screenX = (canvasWidth - screenWidth) / 2;
-  const screenY = canvasHeight - screenCenterHeight - screenHeight / 2;
+  if (aspectRatio > canvasWidth / canvasHeight) {
+    // Screen is wider relative to canvas
+    scaledScreenWidth = canvasWidth - padding * 2;
+    scaledScreenHeight = scaledScreenWidth / aspectRatio;
+  } else {
+    // Screen is taller relative to canvas
+    scaledScreenHeight = canvasHeight - padding * 2;
+    scaledScreenWidth = scaledScreenHeight * aspectRatio;
+  }
+
+  // Position the screen at the center of the canvas
+  const screenX = (canvasWidth - scaledScreenWidth) / 2;
+  const screenY = (canvasHeight - scaledScreenHeight) / 2;
+
+  // Niche dimensions and positions
+  const nicheWidth = scaledScreenWidth + clearance * 2;
+  const nicheHeight = scaledScreenHeight + clearance * 2;
+  const nicheX = screenX - clearance;
+  const nicheY = screenY - clearance;
 
   // Calculate the center coordinates of the screen
-  const centerX = screenX + screenWidth / 2;
-  const centerY = screenY + screenHeight / 2;
-
-  const nicheDimensions = {
-    Height: 30.5,
-    Width: 51,
-    Depth: 3.7,
-  };
-
-  const screenDimensions = {
-    Height: 28,
-    Width: 48.5,
-    'Floor Line': 50,
-  };
-
-  const notes = [
-    'Install recessed receptacle box with:',
-    '2x Terminated Power Outlets',
-    '1x Terminated Data CAT5 Ethernet Outlet',
-  ];
-
-  const dimensions = [
-    { label: 'Height', value: '6.6' },
-    { label: 'Width', value: '6.012' },
-    { label: 'Depth', value: '3.75' },
-  ];
+  const centerX = screenX + scaledScreenWidth / 2;
+  const centerY = screenY + scaledScreenHeight / 2;
 
   return (
     <div className="canvas-container">
-      {/* Left Side: Canvas */}
+      {/* Canvas Area */}
       <div className="canvas-area">
-        <Stage width={canvasWidth} height={canvasHeight} ref={stageRef}>
-          <Layer>
-            {/* Floor Line */}
-            <Line
-              points={[0, canvasHeight, canvasWidth, canvasHeight]}
-              stroke="gray"
-              strokeWidth={2}
-            />
+        <div className="canvas-stage">
+          <Stage width={canvasWidth} height={canvasHeight} ref={stageRef}>
+            <Layer>
+              {/* Screen Rectangle */}
+              <Rect
+                x={screenX}
+                y={screenY}
+                width={scaledScreenWidth}
+                height={scaledScreenHeight}
+                stroke="black"
+                strokeWidth={5}
+              />
+              {/* Niche Rectangle */}
+              <Rect
+                x={nicheX}
+                y={nicheY}
+                width={nicheWidth}
+                height={nicheHeight}
+                stroke="black"
+                strokeWidth={2}
+              />
+              {/* Measurement Lines and Labels */}
+              {/* Horizontal Measurement (Screen Width) */}
+              <Line
+                points={[
+                  screenX,
+                  screenY - 15,
+                  screenX,
+                  screenY - 35,
+                  screenX + scaledScreenWidth,
+                  screenY - 35,
+                  screenX + scaledScreenWidth,
+                  screenY - 15,
+                ]}
+                stroke="black"
+                strokeWidth={1}
+              />
+              <LineWithArrows
+                x1={screenX + 5}
+                y1={screenY - 35}
+                x2={screenX + scaledScreenWidth - 5}
+                y2={screenY - 35}
+                text={`${screenWidthInInches}"`}
+              />
+              {/* Vertical Measurement (Screen Height) */}
+              <Line
+                points={[
+                  screenX + scaledScreenWidth + 15,
+                  screenY,
+                  screenX + scaledScreenWidth + 35,
+                  screenY,
+                  screenX + scaledScreenWidth + 35,
+                  screenY + scaledScreenHeight,
+                  screenX + scaledScreenWidth + 15,
+                  screenY + scaledScreenHeight,
+                ]}
+                stroke="black"
+                strokeWidth={1}
+              />
+              <LineWithArrows
+                x1={screenX + scaledScreenWidth + 35}
+                y1={screenY + 5}
+                x2={screenX + scaledScreenWidth + 35}
+                y2={screenY + scaledScreenHeight - 5}
+                text={`${screenHeightInInches}"`}
+              />
+              {/* Measurement Lines and Labels for Niche */}
+              {/* Horizontal Measurement (Niche Width) */}
+              <Line
+                points={[
+                  nicheX,
+                  nicheY + nicheHeight + 5,
+                  nicheX,
+                  nicheY + nicheHeight + 25,
+                  nicheX + nicheWidth,
+                  nicheY + nicheHeight + 25,
+                  nicheX + nicheWidth,
+                  nicheY + nicheHeight + 5,
+                ]}
+                stroke="black"
+                strokeWidth={1}
+              />
+              <LineWithArrows
+                x1={nicheX + 5}
+                y1={nicheY + nicheHeight + 25}
+                x2={nicheX + nicheWidth - 5}
+                y2={nicheY + nicheHeight + 25}
+                text={`${nicheWidthInInches}"`}
+              />
+              {/* Vertical Measurement (Niche Height) */}
+              <Line
+                points={[
+                  nicheX - 5,
+                  nicheY,
+                  nicheX - 25,
+                  nicheY,
+                  nicheX - 25,
+                  nicheY + nicheHeight,
+                  nicheX - 5,
+                  nicheY + nicheHeight,
+                ]}
+                stroke="black"
+                strokeWidth={1}
+              />
+              <LineWithArrows
+                x1={nicheX - 25}
+                y1={nicheY + 5}
+                x2={nicheX - 25}
+                y2={nicheY + nicheHeight - 5}
+                text={`${nicheHeightInInches}"`}
+              />
+              {/* Floor Line */}
+              <Line
+                points={[
+                  0,
+                  canvasHeight - padding,
+                  canvasWidth,
+                  canvasHeight - padding,
+                ]}
+                stroke="gray"
+                strokeWidth={2}
+              />
+              {/* Vertical Axis */}
+              <Line
+                points={[centerX, 150, centerX, canvasHeight - 150]}
+                stroke="black"
+                strokeWidth={1}
+                dash={[5, 5]}
+              />
+              {/* Horizontal Axis */}
+              <Line
+                points={[25, centerY, canvasWidth - 25, centerY]}
+                stroke="black"
+                strokeWidth={1}
+                dash={[5, 5]}
+              />
 
-            {/* Screen Rectangle */}
-            <Rect
-              x={screenX}
-              y={screenY}
-              width={screenWidth}
-              height={screenHeight}
-              fill="lightblue"
-              stroke="black"
-              strokeWidth={2}
-            />
-
-            {/* Dashed Axes Through Screen Center */}
-            {/* Vertical Axis */}
-            <Line
-              points={[centerX, 0, centerX, canvasHeight]}
-              stroke="black"
-              strokeWidth={1}
-              dash={[5, 5]}
-            />
-            {/* Horizontal Axis */}
-            <Line
-              points={[0, centerY, canvasWidth, centerY]}
-              stroke="black"
-              strokeWidth={1}
-              dash={[5, 5]}
-            />
-
-            {/* Screen Width Measurement */}
-            <Line
-              points={[
-                screenX,
-                screenY + screenHeight + 20,
-                screenX + screenWidth,
-                screenY + screenHeight + 20,
-              ]}
-              stroke="black"
-              strokeWidth={1}
-            />
-            <Arrow
-              points={[
-                screenX,
-                screenY + screenHeight + 20,
-                screenX,
-                screenY + screenHeight + 15,
-              ]}
-              stroke="black"
-              fill="black"
-              strokeWidth={1}
-            />
-            <Arrow
-              points={[
-                screenX + screenWidth,
-                screenY + screenHeight + 20,
-                screenX + screenWidth,
-                screenY + screenHeight + 15,
-              ]}
-              stroke="black"
-              fill="black"
-              strokeWidth={1}
-            />
-            <Text
-              x={screenX + screenWidth / 2 - 40}
-              y={screenY + screenHeight + 25}
-              text={`${screenWidthInInches}"`}
-              fontSize={12}
-              fill="black"
-            />
-
-            {/* Screen Height Measurement */}
-            <Line
-              points={[
-                screenX - 20,
-                screenY,
-                screenX - 20,
-                screenY + screenHeight,
-              ]}
-              stroke="black"
-              strokeWidth={1}
-            />
-            <Arrow
-              points={[screenX - 20, screenY, screenX - 15, screenY]}
-              stroke="black"
-              fill="black"
-              strokeWidth={1}
-            />
-            <Arrow
-              points={[
-                screenX - 20,
-                screenY + screenHeight,
-                screenX - 15,
-                screenY + screenHeight,
-              ]}
-              stroke="black"
-              fill="black"
-              strokeWidth={1}
-            />
-            <Text
-              x={screenX - 60}
-              y={screenY + screenHeight / 2 - 6}
-              text={`${screenHeightInInches}"`}
-              fontSize={12}
-              fill="black"
-            />
-
-            {/* Floor Distance Line */}
-            <Line
-              points={[centerX, canvasHeight, centerX, centerY]}
-              stroke="black"
-              strokeWidth={1}
-            />
-            <Arrow
-              points={[centerX, canvasHeight, centerX + 5, canvasHeight - 5]}
-              stroke="black"
-              fill="black"
-              strokeWidth={1}
-            />
-            <Arrow
-              points={[centerX, centerY, centerX + 5, centerY + 5]}
-              stroke="black"
-              fill="black"
-              strokeWidth={1}
-            />
-            <Text
-              x={centerX + 10}
-              y={(canvasHeight + centerY) / 2 - 6}
-              text={`${screenCenterHeightInInches}"`}
-              fontSize={12}
-              fill="black"
-            />
-          </Layer>
-        </Stage>
+              {/* Floor Distance Line */}
+              <LineWithArrows
+                x1={30}
+                y1={canvasHeight - padding - 5}
+                x2={30}
+                y2={centerY + 10}
+                text={`${floorDistance}"`}
+              />
+            </Layer>
+          </Stage>
+        </div>
       </div>
 
-      {/* Right Side: Information */}
+      {/* Information and Notes */}
+      {/* Uncomment and use these components as needed */}
       <div className="info-area">
-        <div className="dimension-container">
-          <DimensionDisplay title="Niche Dimensions" data={nicheDimensions} />
-          <DimensionDisplay title="Screen Dimensions" data={screenDimensions} />
-        </div>
-        <NotesCard title="Notes" notes={notes} dimensions={dimensions} />
-        <InformationCard />
-        {/* <h3>Screen Information</h3>
-        <div className="info-section">
-          <h4>Niche Dimensions:</h4>
-          <ul>
-            {Object.entries(screenInfo.nicheDimensions).map(([key, value]) => (
-              <li key={key}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="info-section">
-          <h4>Screen Dimensions:</h4>
-          <ul>
-            {Object.entries(screenInfo.screenDimensions).map(([key, value]) => (
-              <li key={key}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="info-section">
-          <h4>Notes:</h4>
-          <ul>
-            {screenInfo.notes.map((note, index) => (
-              <li key={index}>{note}</li>
-            ))}
-          </ul>
-        </div> */}
+        <InformationCard
+          dimensions={{
+            Width: screenWidthInInches,
+            Height: screenHeightInInches,
+          }}
+        />
+        {/* <NotesCard
+          notes={[
+            'Install recessed receptacle box with:',
+            '2x Terminated Power Outlets',
+            '1x Terminated Data CAT5 Ethernet Outlet',
+          ]}
+        /> */}
       </div>
     </div>
   );

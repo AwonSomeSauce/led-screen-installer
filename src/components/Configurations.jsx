@@ -83,7 +83,17 @@ const Configurations = ({ config, setConfig }) => {
 
   // Handle either-or options
   const handleToggleChange = (key, value) => {
-    setConfig({ ...config, [key]: value });
+    // If toggling orientation to different than the current one swap height and width
+    if (value !== config.orientation) {
+      const updatedModel = {
+        ...config.model,
+        height: config.model.width,
+        width: config.model.height,
+      };
+      setConfig({ ...config, [key]: value, model: updatedModel });
+    } else {
+      setConfig({ ...config, [key]: value });
+    }
   };
 
   // Handle input field changes
@@ -146,6 +156,27 @@ const Configurations = ({ config, setConfig }) => {
           >
             Flat Wall
           </button>
+        </div>
+      </div>
+      {/* Input Fields */}
+      <div className="input-group">
+        <div className="input-field">
+          <label htmlFor="floorDistance">Floor Distance (in)</label>
+          <input
+            type="number"
+            id="floorDistance"
+            value={config.floorDistance || ''}
+            onChange={(e) => handleInputChange('floorDistance', e.target.value)}
+          />
+        </div>
+        <div className="input-field">
+          <label htmlFor="nicheDepthVar">Niche Depth Var (in)</label>
+          <input
+            type="number"
+            id="nicheDepthVar"
+            value={config.nicheDepthVar || ''}
+            onChange={(e) => handleInputChange('nicheDepthVar', e.target.value)}
+          />
         </div>
       </div>
     </div>
